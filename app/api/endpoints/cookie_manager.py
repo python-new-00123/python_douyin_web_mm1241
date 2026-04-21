@@ -28,13 +28,13 @@ class CookieResponse(BaseModel):
 async def get_cookie_api(service: str):
     try:
         await db_manager.init_pool()
-        cookie = await db_manager.get_cookie(service)
-        if cookie:
+        cookie_info = await db_manager.get_cookie(service)
+        if cookie_info:
             return CookieResponse(
                 success=True,
                 message="Cookie retrieved successfully",
                 service=service,
-                cookie=cookie
+                cookie=cookie_info['cookie']
             )
         else:
             return CookieResponse(
