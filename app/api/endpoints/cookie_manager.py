@@ -27,7 +27,8 @@ class CookieResponse(BaseModel):
 @router.get("/{service}", response_model=CookieResponse)
 async def get_cookie(service: str):
     try:
-        cookie = db_manager.get_cookie(service)
+        await db_manager.init_pool()
+        cookie = await db_manager.get_cookie(service)
         if cookie:
             return CookieResponse(
                 success=True,
@@ -48,7 +49,8 @@ async def get_cookie(service: str):
 @router.post("/", response_model=CookieResponse)
 async def update_cookie(request: CookieUpdateRequest):
     try:
-        db_manager.save_cookie(request.service, request.cookie)
+        await db_manager.init_pool()
+        await db_manager.save_cookie(request.service, request.cookie)
         return CookieResponse(
             success=True,
             message=f"Cookie updated successfully for service: {request.service}",
