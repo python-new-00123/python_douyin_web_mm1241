@@ -207,7 +207,7 @@ class DouyinWebCrawler:
                 }
         
         # 使用缓存的 cookie 或配置文件中的默认 cookie
-        cookie_to_use = self._current_cookie_cache['cookie'] if self._current_cookie_cache else douyin_config["headers"]["Cookie"]
+        cookie_to_use = self._current_cookie_cache['cookie'] if self._current_cookie_cache['cookie'] else douyin_config["headers"]["Cookie"]
         
         kwargs = {
             "headers": {
