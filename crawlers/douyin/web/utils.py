@@ -1,7 +1,7 @@
 # ==============================================================================
 # Copyright (C) 2021 Evil0ctal
 #
-# This file is part of the Douyin_TikTok_Download_API project.
+# This file is part of the python_douyin_web_mm1241 project.
 #
 # This project is licensed under the Apache License 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -131,7 +131,7 @@ class TokenManager:
             #     # 捕获 httpx 的状态代码错误 (captures specific status code errors from httpx)
             #     if e.response.status_code == 401:
             #         raise APIUnauthorizedError(
-            #             "参数验证失败，请更新 Douyin_TikTok_Download_API 配置文件中的 {0}，以匹配 {1} 新规则"
+            #             "参数验证失败，请更新 python_douyin_web_mm1241 配置文件中的 {0}，以匹配 {1} 新规则"
             #             .format("msToken", "douyin")
             #         )
             #
@@ -184,7 +184,7 @@ class TokenManager:
                 # 捕获 httpx 的状态代码错误 (captures specific status code errors from httpx)
                 if e.response.status_code == 401:
                     raise APIUnauthorizedError(
-                        "参数验证失败，请更新 Douyin_TikTok_Download_API 配置文件中的 {0}，以匹配 {1} 新规则"
+                        "参数验证失败，请更新 python_douyin_web_mm1241 配置文件中的 {0}，以匹配 {1} 新规则"
                         .format("ttwid", "douyin")
                     )
 

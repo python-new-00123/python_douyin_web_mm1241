@@ -69,7 +69,7 @@ def error_do(reason: str, value: str) -> None:
         "- You can try to parse again, or try to deploy the project by yourself, and then replace the `cookie` value in `./app/crawlers/platform folder/config.yaml`."))
 
     put_markdown(
-        "- GitHub Issue: [Evil0ctal/Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API/issues)")
+        "- GitHub Issue: [Evil0ctal/python_douyin_web_mm1241](https://github.com/Evil0ctal/python_douyin_web_mm1241/issues)")
     put_html("<hr>")
 
 

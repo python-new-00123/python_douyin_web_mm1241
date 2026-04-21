@@ -12,10 +12,10 @@ def about_pop_window():
                   title='访问记录')
         put_html('<hr>')
         put_html('<h3>⭐Github</h3>')
-        put_markdown('[Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API)')
+        put_markdown('[python_douyin_web_mm1241](https://github.com/Evil0ctal/python_douyin_web_mm1241)')
         put_html('<hr>')
         put_html('<h3>🎯{}</h3>'.format(t('反馈', 'Feedback')))
-        put_markdown('{}：[issues](https://github.com/Evil0ctal/Douyin_TikTok_Download_API/issues)'.format(
+        put_markdown('{}：[issues](https://github.com/Evil0ctal/python_douyin_web_mm1241/issues)'.format(
             t('Bug反馈', 'Bug Feedback')))
         put_html('<hr>')
         put_html('<h3>💖WeChat</h3>')

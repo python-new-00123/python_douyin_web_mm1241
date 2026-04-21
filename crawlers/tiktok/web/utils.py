@@ -87,7 +87,7 @@ class TokenManager:
             # except httpx.HTTPStatusError as e:
             #     # 捕获 httpx 的状态代码错误 (captures specific status code errors from httpx)
             #     if response.status_code == 401:
-            #         raise APIUnauthorizedError("参数验证失败，请更新 Douyin_TikTok_Download_API 配置文件中的 {0}，以匹配 {1} 新规则"
+            #         raise APIUnauthorizedError("参数验证失败，请更新 python_douyin_web_mm1241 配置文件中的 {0}，以匹配 {1} 新规则"
             #                                    .format("msToken", "tiktok")
             #                                    )
             #
@@ -148,7 +148,7 @@ class TokenManager:
             except httpx.HTTPStatusError as e:
                 # 捕获 httpx 的状态代码错误 (captures specific status code errors from httpx)
                 if response.status_code == 401:
-                    raise APIUnauthorizedError("参数验证失败，请更新 Douyin_TikTok_Download_API 配置文件中的 {0}，以匹配 {1} 新规则"
+                    raise APIUnauthorizedError("参数验证失败，请更新 python_douyin_web_mm1241 配置文件中的 {0}，以匹配 {1} 新规则"
                                                .format("ttwid", "tiktok")
                                                )
 
@@ -187,7 +187,7 @@ class TokenManager:
             except httpx.HTTPStatusError as e:
                 # 捕获 httpx 的状态代码错误 (captures specific status code errors from httpx)
                 if response.status_code == 401:
-                    raise APIUnauthorizedError("参数验证失败，请更新 Douyin_TikTok_Download_API 配置文件中的 {0}，以匹配 {1} 新规则"
+                    raise APIUnauthorizedError("参数验证失败，请更新 python_douyin_web_mm1241 配置文件中的 {0}，以匹配 {1} 新规则"
                                                .format("odin_tt", "tiktok")
                                                )
 

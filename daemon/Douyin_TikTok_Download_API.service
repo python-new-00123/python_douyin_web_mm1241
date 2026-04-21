@@ -1,13 +1,13 @@
 [Unit]
-Description=Douyin_TikTok_Download_API daemon
+Description=python_douyin_web_mm1241 daemon
 After=network.target
 
 [Service]
 Type=simple
 User=root
 Group=root
-WorkingDirectory=/www/wwwroot/Douyin_TikTok_Download_API
-ExecStart=/www/wwwroot/Douyin_TikTok_Download_API/venv/bin/python3 start.py
+WorkingDirectory=/www/wwwroot/python_douyin_web_mm1241
+ExecStart=/www/wwwroot/python_douyin_web_mm1241/venv/bin/python3 start.py
 Restart=always
 
 [Install]

@@ -1,7 +1,7 @@
 # ==============================================================================
 # Copyright (C) 2021 Evil0ctal
 #
-# This file is part of the Douyin_TikTok_Download_API project.
+# This file is part of the python_douyin_web_mm1241 project.
 #
 # This project is licensed under the Apache License 2.0 (the "License");
 # you may not use this file except in compliance with the License.

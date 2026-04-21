@@ -1,7 +1,7 @@
 # ==============================================================================
 # Copyright (C) 2021 Evil0ctal
 #
-# This file is part of the Douyin_TikTok_Download_API project.
+# This file is part of the python_douyin_web_mm1241 project.
 #
 # This project is licensed under the Apache License 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ class LogManager(metaclass=Singleton):
         if getattr(self, "_initialized", False):  # 防止重复初始化
             return
 
-        self.logger = logging.getLogger("Douyin_TikTok_Download_API_Crawlers")
+        self.logger = logging.getLogger("python_douyin_web_mm1241_Crawlers")
         self.logger.setLevel(logging.INFO)
         self.log_dir = None
         self._initialized = True
@@ -145,7 +145,7 @@ class LogManager(metaclass=Singleton):
 
 
 def log_setup(log_to_console=True):
-    logger = logging.getLogger("Douyin_TikTok_Download_API_Crawlers")
+    logger = logging.getLogger("python_douyin_web_mm1241_Crawlers")
     if logger.hasHandlers():
         # logger已经被设置，不做任何操作
         return logger

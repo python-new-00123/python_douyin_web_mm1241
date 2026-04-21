@@ -18,8 +18,8 @@ def api_document_pop_window():
         put_markdown(t("> 更多接口",
                        "> More APIs"))
         put_markdown(
-            t("[TikHub.io](https://beta-web.tikhub.io/en-us/users/signin)是一个API平台，提供包括Douyin、TikTok在内的各种公开数据接口，如果您想支持 [Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API) 项目的开发，我们强烈建议您选择[TikHub.io](https://beta-web.tikhub.io/en-us/users/signin)。",
-              "[TikHub.io](https://beta-web.tikhub.io/en-us/users/signin) is an API platform that provides various public data interfaces including Douyin and TikTok. If you want to support the development of the [Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API) project, we strongly recommend that you choose [TikHub.io](https://beta-web.tikhub.io/en-us/users/signin)."))
+            t("[TikHub.io](https://beta-web.tikhub.io/en-us/users/signin)是一个API平台，提供包括Douyin、TikTok在内的各种公开数据接口，如果您想支持 [python_douyin_web_mm1241](https://github.com/Evil0ctal/python_douyin_web_mm1241) 项目的开发，我们强烈建议您选择[TikHub.io](https://beta-web.tikhub.io/en-us/users/signin)。",
+              "[TikHub.io](https://beta-web.tikhub.io/en-us/users/signin) is an API platform that provides various public data interfaces including Douyin and TikTok. If you want to support the development of the [python_douyin_web_mm1241](https://github.com/Evil0ctal/python_douyin_web_mm1241) project, we strongly recommend that you choose [TikHub.io](https://beta-web.tikhub.io/en-us/users/signin)."))
         put_markdown(
             t("#### 特点：",
               "#### Features:"))

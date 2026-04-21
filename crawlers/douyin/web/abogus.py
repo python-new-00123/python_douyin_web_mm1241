@@ -5,14 +5,14 @@ And is licensed under the GNU General Public License v3.0
 If you use this code, please keep this license and the original author information.
 
 Modified by:
-And this file is now a part of the https://github.com/Evil0ctal/Douyin_TikTok_Download_API open-source project.
+And this file is now a part of the https://github.com/Evil0ctal/python_douyin_web_mm1241 open-source project.
 This project is licensed under the Apache License 2.0, and the original author information is kept.
 
 Purpose:
 This file is used to generate the `a_bogus` parameter for the Douyin Web API.
 
 Changes Made:
-1. Changed the ua_code to compatible with the current config file User-Agent string in https://github.com/Evil0ctal/Douyin_TikTok_Download_API/blob/main/crawlers/douyin/web/config.yaml
+1. Changed the ua_code to compatible with the current config file User-Agent string in https://github.com/Evil0ctal/python_douyin_web_mm1241/blob/main/crawlers/douyin/web/config.yaml
 """
 
 from random import choice
