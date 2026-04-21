@@ -25,7 +25,7 @@ class CookieResponse(BaseModel):
 
 
 @router.get("/{service}", response_model=CookieResponse)
-async def get_cookie(service: str):
+async def get_cookie_api(service: str):
     try:
         await db_manager.init_pool()
         cookie = await db_manager.get_cookie(service)
@@ -47,7 +47,7 @@ async def get_cookie(service: str):
 
 
 @router.post("/", response_model=CookieResponse)
-async def update_cookie(request: CookieUpdateRequest):
+async def update_cookie_api(request: CookieUpdateRequest):
     try:
         await db_manager.init_pool()
         await db_manager.save_cookie(request.service, request.cookie)
@@ -61,7 +61,7 @@ async def update_cookie(request: CookieUpdateRequest):
 
 
 @router.delete("/{service}", response_model=CookieResponse)
-async def delete_cookie(service: str):
+async def delete_cookie_api(service: str):
     try:
         await db_manager.init_pool()
         async with db_manager.pool.acquire() as conn:
@@ -81,7 +81,7 @@ async def delete_cookie(service: str):
 
 
 @router.get("/list/all", response_model=list)
-async def list_all_cookies():
+async def list_all_cookies_api():
     try:
         await db_manager.init_pool()
         async with db_manager.pool.acquire() as conn:
