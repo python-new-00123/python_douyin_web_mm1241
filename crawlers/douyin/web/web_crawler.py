@@ -107,17 +107,17 @@ class DatabaseManager:
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
                 ''')
     
-    async def get_cookie(self, service: str) -> str:
-        """获取 Cookie"""
+    async def get_cookie(self, service: str) -> dict:
+        """获取 Cookie 及其信息（包括 updated_at）"""
         await self.init_pool()
         async with self.pool.acquire() as conn:
             async with conn.cursor(aiomysql.DictCursor) as cursor:
                 await cursor.execute(
-                    'SELECT cookie FROM cookies WHERE service = %s AND is_active = 1 ORDER BY updated_at DESC LIMIT 1',
+                    'SELECT id, cookie, updated_at FROM cookies WHERE service = %s AND is_active = 1 ORDER BY updated_at DESC LIMIT 1',
                     (service,)
                 )
                 result = await cursor.fetchone()
-                return result['cookie'] if result else None
+                return result if result else None
     
     async def save_cookie(self, service: str, cookie: str):
         """保存 Cookie """
@@ -135,6 +135,26 @@ class DatabaseManager:
                     (service, cookie, datetime.now())
                 )
     
+    async def activate_cookie(self, cookie_id: int):
+        """将 cookie 标记为激活状态（is_active=1）"""
+        await self.init_pool()
+        async with self.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await cursor.execute(
+                    'UPDATE cookies SET is_active = 1 WHERE id = %s',
+                    (cookie_id,)
+                )
+    
+    async def expire_cookie(self, cookie_id: int):
+        """将 cookie 标记为使用中状态（is_active=2）"""
+        await self.init_pool()
+        async with self.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await cursor.execute(
+                    'UPDATE cookies SET is_active = 2 WHERE id = %s',
+                    (cookie_id,)
+                )
+    
     async def close(self):
         """关闭连接池"""
         if self.pool:
@@ -145,18 +165,56 @@ db_manager = DatabaseManager()
 
 
 class DouyinWebCrawler:
+    # 类变量：缓存当前使用的 cookie 信息
+    _current_cookie_cache = None  # {'cookie': str, 'updated_at': datetime, 'id': int}
 
     # 从配置文件中获取抖音的请求头
     async def get_douyin_headers(self):
         douyin_config = config["TokenManager"]["douyin"]
-        cookie_from_db = await db_manager.get_cookie("douyin")
+        
+        # 检查缓存的 cookie 是否过期
+        if self._current_cookie_cache:
+            time_diff = (datetime.now() - self._current_cookie_cache['updated_at']).total_seconds()
+            if time_diff >= 1800:  # 30分钟 = 1800秒
+                # 已过期，从数据库取一个新的
+                cookie_info = await db_manager.get_cookie("douyin")
+                if cookie_info:
+                    # 将新取的 cookie 标记为使用中（is_active=2）
+                    await db_manager.expire_cookie(cookie_info['id'])
+                    # 释放原来的 cookie，更新状态为 1
+                    await db_manager.activate_cookie(self._current_cookie_cache['id'])
+                    # 更新缓存
+                    self._current_cookie_cache = {
+                        'cookie': cookie_info['cookie'],
+                        'updated_at': cookie_info['updated_at'],
+                        'id': cookie_info['id']
+                    }
+                else:
+                    # 没有取到新的 cookie，释放原来的，清空缓存
+                    await db_manager.activate_cookie(self._current_cookie_cache['id'])
+                    self._current_cookie_cache = None
+        
+        # 如果没有缓存，从数据库获取新的 cookie
+        if not self._current_cookie_cache:
+            cookie_info = await db_manager.get_cookie("douyin")
+            if cookie_info:
+                # 获取到新的 cookie，标记为使用中（is_active=2）
+                await db_manager.expire_cookie(cookie_info['id'])
+                self._current_cookie_cache = {
+                    'cookie': cookie_info['cookie'],
+                    'updated_at': cookie_info['updated_at'],
+                    'id': cookie_info['id']
+                }
+        
+        # 使用缓存的 cookie 或配置文件中的默认 cookie
+        cookie_to_use = self._current_cookie_cache['cookie'] if self._current_cookie_cache else douyin_config["headers"]["Cookie"]
         
         kwargs = {
             "headers": {
                 "Accept-Language": douyin_config["headers"]["Accept-Language"],
                 "User-Agent": douyin_config["headers"]["User-Agent"],
                 "Referer": douyin_config["headers"]["Referer"],
-                "Cookie": cookie_from_db if cookie_from_db else douyin_config["headers"]["Cookie"],
+                "Cookie": cookie_to_use,
             },
             "proxies": {"http://": douyin_config["proxies"]["http"], "https://": douyin_config["proxies"]["https"]},
         }
