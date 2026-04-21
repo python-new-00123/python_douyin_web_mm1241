@@ -151,7 +151,7 @@ class DatabaseManager:
         async with self.pool.acquire() as conn:
             async with conn.cursor() as cursor:
                 await cursor.execute(
-                    'UPDATE cookies SET is_active = 2 WHERE id = %s',
+                    'UPDATE cookies SET is_active = 2, updated_at = NOW() WHERE id = %s',
                     (cookie_id,)
                 )
     
