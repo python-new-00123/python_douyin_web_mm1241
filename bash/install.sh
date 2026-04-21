@@ -24,7 +24,7 @@ sudo mkdir -p /www/wwwroot
 cd /www/wwwroot || { echo "Failed to change directory to /www/wwwroot | 无法切换到目录 /www/wwwroot"; exit 1; }
 
 echo 'Cloning Douyin_TikTok_Download_API.git from Github! | 正在从Github克隆Douyin_TikTok_Download_API.git!'
-sudo git clone https://github.com/python-new-00123/demo-repository.git
+sudo git clone https://github.com/python-new-00123/python_douyin_web_mm1241.git
 
 cd Douyin_TikTok_Download_API/ || { echo "Failed to change directory to Douyin_TikTok_Download_API | 无法切换到目录 Douyin_TikTok_Download_API"; exit 1; }
 
