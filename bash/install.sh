@@ -23,10 +23,10 @@ sudo mkdir -p /www/wwwroot
 
 cd /www/wwwroot || { echo "Failed to change directory to /www/wwwroot | 无法切换到目录 /www/wwwroot"; exit 1; }
 
-echo 'Cloning Douyin_TikTok_Download_API.git from Github! | 正在从Github克隆Douyin_TikTok_Download_API.git!'
+echo 'Cloning python_douyin_web_mm1241.git from Github! | 正在从Github克隆Douyin_TikTok_Download_API.git!'
 sudo git clone https://github.com/python-new-00123/python_douyin_web_mm1241.git
 
-cd Douyin_TikTok_Download_API/ || { echo "Failed to change directory to Douyin_TikTok_Download_API | 无法切换到目录 Douyin_TikTok_Download_API"; exit 1; }
+cd python_douyin_web_mm1241/ || { echo "Failed to change directory to python_douyin_web_mm1241 | 无法切换到目录 python_douyin_web_mm1241"; exit 1; }
 
 echo 'Creating a virtual environment | 正在创建虚拟环境'
 python3 -m venv venv
@@ -46,16 +46,16 @@ pip install -r requirements.txt
 echo 'Deactivating the virtual environment | 正在停用虚拟环境'
 deactivate
 
-echo 'Adding Douyin_TikTok_Download_API to system service | 将Douyin_TikTok_Download_API添加到系统服务'
+echo 'Adding python_douyin_web_mm1241 to system service | 将Douyin_TikTok_Download_API添加到系统服务'
 sudo cp daemon/* /etc/systemd/system/
 
-echo 'Enabling Douyin_TikTok_Download_API service | 启用Douyin_TikTok_Download_API服务'
-sudo systemctl enable Douyin_TikTok_Download_API.service
+echo 'Enabling python_douyin_web_mm1241 service | 启用Douyin_TikTok_Download_API服务'
+sudo systemctl enable python_douyin_web_mm1241.service
 
-echo 'Starting Douyin_TikTok_Download_API service | 启动Douyin_TikTok_Download_API服务'
-sudo systemctl start Douyin_TikTok_Download_API.service
+echo 'Starting python_douyin_web_mm1241 service | 启动Douyin_TikTok_Download_API服务'
+sudo systemctl start python_douyin_web_mm1241.service
 
-echo 'Douyin_TikTok_Download_API installation complete! | Douyin_TikTok_Download_API安装完成!'
+echo 'python_douyin_web_mm1241 installation complete! | Douyin_TikTok_Download_API安装完成!'
 echo 'You can access the API at http://localhost:80 | 您可以在http://localhost:80访问API'
-echo 'You can change the port in config.yaml under the /www/wwwroot/Douyin_TikTok_Download_API directory | 您可以在/www/wwwroot/Douyin_TikTok_Download_API目录下的config.yaml中更改端口'
-echo 'If the API is not working, please change the cookie in config.yaml under the /www/wwwroot/Douyin_TikTok_Download_API/crawler/[Douyin/TikTok]/[APP/Web]/config.yaml directory | 如果API无法工作，请更改/www/wwwroot/Douyin_TikTok_Download_API/crawler/[Douyin/TikTok]/[APP/Web]/config.yaml目录下的cookie'
+echo 'You can change the port in config.yaml under the /www/wwwroot/python_douyin_web_mm1241 directory | 您可以在/www/wwwroot/Douyin_TikTok_Download_API目录下的config.yaml中更改端口'
+echo 'If the API is not working, please change the cookie in config.yaml under the /www/wwwroot/python_douyin_web_mm1241/crawler/[Douyin/TikTok]/[APP/Web]/config.yaml directory | 如果API无法工作，请更改/www/wwwroot/python_douyin_web_mm1241/crawler/[Douyin/TikTok]/[APP/Web]/config.yaml目录下的cookie'
