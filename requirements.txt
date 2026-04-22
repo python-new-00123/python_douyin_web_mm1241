@@ -38,3 +38,4 @@ gmssl==3.2.2
 tenacity~=9.0.0
 aiomysql==0.2.0
 PyMySQL==1.1.0
+aiohttp==3.9.3
