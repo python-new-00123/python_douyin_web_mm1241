@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS cookies (
     cookie TEXT NOT NULL COMMENT 'Cookie值',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
     is_active TINYINT DEFAULT 1 COMMENT '是否激活（1=激活，0=禁用）',
+    ip_address VARCHAR(45) DEFAULT NULL COMMENT '使用此Cookie的机器外网IP',
     INDEX idx_service (service),
     INDEX idx_active (is_active)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Cookies存储表';

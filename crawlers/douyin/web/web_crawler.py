@@ -40,6 +40,7 @@ from urllib.parse import urlencode, quote  # URL编码
 import yaml  # 配置文件
 import aiomysql  # MySQL 异步驱动
 from datetime import datetime  # 时间
+import aiohttp  # HTTP请求
 
 # 基础爬虫客户端和抖音API端点
 from crawlers.base_crawler import BaseCrawler
@@ -102,6 +103,7 @@ class DatabaseManager:
                         cookie TEXT NOT NULL,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         is_active TINYINT DEFAULT 1,
+                        ip_address VARCHAR(45) DEFAULT NULL,
                         INDEX idx_service (service),
                         INDEX idx_active (is_active)
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
@@ -145,15 +147,45 @@ class DatabaseManager:
                     (cookie_id,)
                 )
     
+    async def get_public_ip(self) -> str:
+        """获取当前机器的外网IP"""
+        try:
+            async with aiohttp.ClientSession() as session:
+                # 尝试多个IP查询服务
+                for url in [
+                    'https://api.ipify.org',
+                    'https://ifconfig.me/ip',
+                    'https://icanhazip.com'
+                ]:
+                    try:
+                        async with session.get(url, timeout=aiohttp.ClientTimeout(total=5)) as response:
+                            if response.status == 200:
+                                ip = await response.text()
+                                return ip.strip()
+                    except:
+                        continue
+        except:
+            pass
+        return None
+    
     async def expire_cookie(self, cookie_id: int):
-        """将 cookie 标记为使用中状态（is_active=2）"""
+        """将 cookie 标记为使用中状态（is_active=2）并记录IP"""
         await self.init_pool()
+        # 获取外网IP
+        public_ip = await self.get_public_ip()
+        
         async with self.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute(
-                    'UPDATE cookies SET is_active = 2, updated_at = NOW() WHERE id = %s',
-                    (cookie_id,)
-                )
+                if public_ip:
+                    await cursor.execute(
+                        'UPDATE cookies SET is_active = 2, updated_at = NOW(), ip_address = %s WHERE id = %s',
+                        (public_ip, cookie_id)
+                    )
+                else:
+                    await cursor.execute(
+                        'UPDATE cookies SET is_active = 2, updated_at = NOW() WHERE id = %s',
+                        (cookie_id,)
+                    )
     
     async def close(self):
         """关闭连接池"""
@@ -171,30 +203,7 @@ class DouyinWebCrawler:
     # 从配置文件中获取抖音的请求头
     async def get_douyin_headers(self):
         douyin_config = config["TokenManager"]["douyin"]
-        
-        # 检查缓存的 cookie 是否过期
-        if self._current_cookie_cache:
-            time_diff = (datetime.now() - self._current_cookie_cache['updated_at']).total_seconds()
-            if time_diff >= 1800:  # 30分钟 = 1800秒
-                # 已过期，从数据库取一个新的
-                cookie_info = await db_manager.get_cookie("douyin")
-                if cookie_info:
-                    # 将新取的 cookie 标记为使用中（is_active=2）
-                    await db_manager.expire_cookie(cookie_info['id'])
-                    # 释放原来的 cookie，更新状态为 1
-                    await db_manager.activate_cookie(self._current_cookie_cache['id'])
-                    # 更新缓存
-                    self._current_cookie_cache = {
-                        'cookie': cookie_info['cookie'],
-                        'updated_at': cookie_info['updated_at'],
-                        'id': cookie_info['id']
-                    }
-                else:
-                    # 没有取到新的 cookie，释放原来的，清空缓存
-                    await db_manager.activate_cookie(self._current_cookie_cache['id'])
-                    self._current_cookie_cache = None
-        
-        # 如果没有缓存，从数据库获取新的 cookie
+
         if not self._current_cookie_cache:
             cookie_info = await db_manager.get_cookie("douyin")
             if cookie_info:
