@@ -11,15 +11,17 @@ DouyinWebCrawler = DouyinWebCrawler()
 
 
 # 获取单个作品数据
-@router.get("/fetch_one_video", response_model=ResponseModel, summary="获取单个作品数据/Get single video data")
+@router.post("/fetch_one_video", response_model=ResponseModel, summary="获取单个作品数据/Get single video data")
 async def fetch_one_video(request: Request,
-                          aweme_id: str = Query(example="7372484719365098803", description="作品id/Video id")):
+                          aweme_id: str = Body(example="7372484719365098803", description="作品id/Video id"),
+                          cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
     - 获取单个作品数据
     ### 参数:
     - aweme_id: 作品id
+    - cookie: 用户网页版抖音Cookie(可选)
     ### 返回:
     - 作品数据
 
@@ -28,14 +30,16 @@ async def fetch_one_video(request: Request,
     - Get single video data
     ### Parameters:
     - aweme_id: Video id
+    - cookie: User's web version of Douyin Cookie (Optional)
     ### Return:
     - Video data
 
     # [示例/Example]
     aweme_id = "7372484719365098803"
+    cookie = "YOUR_COOKIE"
     """
     try:
-        data = await DouyinWebCrawler.fetch_one_video(aweme_id)
+        data = await DouyinWebCrawler.fetch_one_video(aweme_id, cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
@@ -49,14 +53,15 @@ async def fetch_one_video(request: Request,
 
 
 # 获取用户作品集合数据
-@router.get("/fetch_user_post_videos", response_model=ResponseModel,
+@router.post("/fetch_user_post_videos", response_model=ResponseModel,
             summary="获取用户主页作品数据/Get user homepage video data")
 async def fetch_user_post_videos(request: Request,
-                                 sec_user_id: str = Query(
+                                 sec_user_id: str = Body(
                                      example="MS4wLjABAAAANXSltcLCzDGmdNFI2Q_QixVTr67NiYzjKOIP5s03CAE",
                                      description="用户sec_user_id/User sec_user_id"),
-                                 max_cursor: int = Query(default=0, description="最大游标/Maximum cursor"),
-                                 count: int = Query(default=20, description="每页数量/Number per page")):
+                                 max_cursor: int = Body(default=0, description="最大游标/Maximum cursor"),
+                                 count: int = Body(default=20, description="每页数量/Number per page"),
+                                 cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
@@ -84,7 +89,7 @@ async def fetch_user_post_videos(request: Request,
     counts = 20
     """
     try:
-        data = await DouyinWebCrawler.fetch_user_post_videos(sec_user_id, max_cursor, count)
+        data = await DouyinWebCrawler.fetch_user_post_videos(sec_user_id, max_cursor, count, cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
@@ -98,14 +103,15 @@ async def fetch_user_post_videos(request: Request,
 
 
 # 获取用户喜欢作品数据
-@router.get("/fetch_user_like_videos", response_model=ResponseModel,
+@router.post("/fetch_user_like_videos", response_model=ResponseModel,
             summary="获取用户喜欢作品数据/Get user like video data")
 async def fetch_user_like_videos(request: Request,
-                                 sec_user_id: str = Query(
+                                 sec_user_id: str = Body(
                                      example="MS4wLjABAAAAW9FWcqS7RdQAWPd2AA5fL_ilmqsIFUCQ_Iym6Yh9_cUa6ZRqVLjVQSUjlHrfXY1Y",
                                      description="用户sec_user_id/User sec_user_id"),
-                                 max_cursor: int = Query(default=0, description="最大游标/Maximum cursor"),
-                                 counts: int = Query(default=20, description="每页数量/Number per page")):
+                                 max_cursor: int = Body(default=0, description="最大游标/Maximum cursor"),
+                                 counts: int = Body(default=20, description="每页数量/Number per page"),
+                                 cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
@@ -133,7 +139,7 @@ async def fetch_user_like_videos(request: Request,
     counts = 20
     """
     try:
-        data = await DouyinWebCrawler.fetch_user_like_videos(sec_user_id, max_cursor, counts)
+        data = await DouyinWebCrawler.fetch_user_like_videos(sec_user_id, max_cursor, counts, cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
@@ -147,13 +153,13 @@ async def fetch_user_like_videos(request: Request,
 
 
 # 获取用户收藏作品数据（用户提供自己的Cookie）
-@router.get("/fetch_user_collection_videos", response_model=ResponseModel,
+@router.post("/fetch_user_collection_videos", response_model=ResponseModel,
             summary="获取用户收藏作品数据/Get user collection video data")
 async def fetch_user_collection_videos(request: Request,
-                                       cookie: str = Query(example="YOUR_COOKIE",
+                                       cookie: str = Body(example="YOUR_COOKIE",
                                                            description="用户网页版抖音Cookie/Your web version of Douyin Cookie"),
-                                       max_cursor: int = Query(default=0, description="最大游标/Maximum cursor"),
-                                       counts: int = Query(default=20, description="每页数量/Number per page")):
+                                       max_cursor: int = Body(default=0, description="最大游标/Maximum cursor"),
+                                       counts: int = Body(default=20, description="每页数量/Number per page")):
     """
     # [中文]
     ### 用途:
@@ -195,12 +201,13 @@ async def fetch_user_collection_videos(request: Request,
 
 
 # 获取用户合辑作品数据
-@router.get("/fetch_user_mix_videos", response_model=ResponseModel,
+@router.post("/fetch_user_mix_videos", response_model=ResponseModel,
             summary="获取用户合辑作品数据/Get user mix video data")
 async def fetch_user_mix_videos(request: Request,
-                                mix_id: str = Query(example="7348687990509553679", description="合辑id/Mix id"),
-                                max_cursor: int = Query(default=0, description="最大游标/Maximum cursor"),
-                                counts: int = Query(default=20, description="每页数量/Number per page")):
+                                mix_id: str = Body(example="7348687990509553679", description="合辑id/Mix id"),
+                                max_cursor: int = Body(default=0, description="最大游标/Maximum cursor"),
+                                counts: int = Body(default=20, description="每页数量/Number per page"),
+                                cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
@@ -229,7 +236,7 @@ async def fetch_user_mix_videos(request: Request,
     counts = 20
     """
     try:
-        data = await DouyinWebCrawler.fetch_user_mix_videos(mix_id, max_cursor, counts)
+        data = await DouyinWebCrawler.fetch_user_mix_videos(mix_id, max_cursor, counts, cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
@@ -243,11 +250,12 @@ async def fetch_user_mix_videos(request: Request,
 
 
 # 获取用户直播流数据
-@router.get("/fetch_user_live_videos", response_model=ResponseModel,
+@router.post("/fetch_user_live_videos", response_model=ResponseModel,
             summary="获取用户直播流数据/Get user live video data")
 async def fetch_user_live_videos(request: Request,
-                                 webcast_id: str = Query(example="285520721194",
-                                                         description="直播间webcast_id/Room webcast_id")):
+                                 webcast_id: str = Body(example="285520721194",
+                                                         description="直播间webcast_id/Room webcast_id"),
+                                 cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
@@ -269,7 +277,7 @@ async def fetch_user_live_videos(request: Request,
     webcast_id = "285520721194"
     """
     try:
-        data = await DouyinWebCrawler.fetch_user_live_videos(webcast_id)
+        data = await DouyinWebCrawler.fetch_user_live_videos(webcast_id, cookie=cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
@@ -283,12 +291,13 @@ async def fetch_user_live_videos(request: Request,
 
 
 # 获取指定用户的直播流数据
-@router.get("/fetch_user_live_videos_by_room_id",
+@router.post("/fetch_user_live_videos_by_room_id",
             response_model=ResponseModel,
             summary="获取指定用户的直播流数据/Get live video data of specified user")
 async def fetch_user_live_videos_by_room_id(request: Request,
-                                            room_id: str = Query(example="7318296342189919011",
-                                                                 description="直播间room_id/Room room_id")):
+                                            room_id: str = Body(example="7318296342189919011",
+                                                                 description="直播间room_id/Room room_id"),
+                                            cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
@@ -310,7 +319,7 @@ async def fetch_user_live_videos_by_room_id(request: Request,
     room_id = "7318296342189919011"
     """
     try:
-        data = await DouyinWebCrawler.fetch_user_live_videos_by_room_id(room_id)
+        data = await DouyinWebCrawler.fetch_user_live_videos_by_room_id(room_id, cookie=cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
@@ -324,13 +333,14 @@ async def fetch_user_live_videos_by_room_id(request: Request,
 
 
 # 获取直播间送礼用户排行榜
-@router.get("/fetch_live_gift_ranking",
+@router.post("/fetch_live_gift_ranking",
             response_model=ResponseModel,
             summary="获取直播间送礼用户排行榜/Get live room gift user ranking")
 async def fetch_live_gift_ranking(request: Request,
-                                  room_id: str = Query(example="7356585666190461731",
+                                  room_id: str = Body(example="7356585666190461731",
                                                        description="直播间room_id/Room room_id"),
-                                  rank_type: int = Query(default=30, description="排行类型/Leaderboard type")):
+                                  rank_type: int = Body(default=30, description="排行类型/Leaderboard type"),
+                                  cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
@@ -355,7 +365,7 @@ async def fetch_live_gift_ranking(request: Request,
     rank_type = 30
     """
     try:
-        data = await DouyinWebCrawler.fetch_live_gift_ranking(room_id, rank_type)
+        data = await DouyinWebCrawler.fetch_live_gift_ranking(room_id, rank_type, cookie=cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
@@ -424,13 +434,14 @@ async def fetch_live_room_product_result(request: Request,
 
 
 # 获取指定用户的信息
-@router.get("/handler_user_profile",
+@router.post("/handler_user_profile",
             response_model=ResponseModel,
             summary="获取指定用户的信息/Get information of specified user")
 async def handler_user_profile(request: Request,
-                               sec_user_id: str = Query(
+                               sec_user_id: str = Body(
                                    example="MS4wLjABAAAAW9FWcqS7RdQAWPd2AA5fL_ilmqsIFUCQ_Iym6Yh9_cUa6ZRqVLjVQSUjlHrfXY1Y",
-                                   description="用户sec_user_id/User sec_user_id")):
+                                   description="用户sec_user_id/User sec_user_id"),
+                               cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
@@ -452,7 +463,7 @@ async def handler_user_profile(request: Request,
     sec_user_id = "MS4wLjABAAAAW9FWcqS7RdQAWPd2AA5fL_ilmqsIFUCQ_Iym6Yh9_cUa6ZRqVLjVQSUjlHrfXY1Y"
     """
     try:
-        data = await DouyinWebCrawler.handler_user_profile(sec_user_id)
+        data = await DouyinWebCrawler.handler_user_profile(sec_user_id, cookie=cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
@@ -466,13 +477,14 @@ async def handler_user_profile(request: Request,
 
 
 # 获取单个视频评论数据
-@router.get("/fetch_video_comments",
+@router.post("/fetch_video_comments",
             response_model=ResponseModel,
             summary="获取单个视频评论数据/Get single video comments data")
 async def fetch_video_comments(request: Request,
-                               aweme_id: str = Query(example="7372484719365098803", description="作品id/Video id"),
-                               cursor: int = Query(default=0, description="游标/Cursor"),
-                               count: int = Query(default=20, description="数量/Number")):
+                               aweme_id: str = Body(example="7372484719365098803", description="作品id/Video id"),
+                               cursor: int = Body(default=0, description="游标/Cursor"),
+                               count: int = Body(default=20, description="数量/Number"),
+                               cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
@@ -500,7 +512,7 @@ async def fetch_video_comments(request: Request,
     count = 20
     """
     try:
-        data = await DouyinWebCrawler.fetch_video_comments(aweme_id, cursor, count)
+        data = await DouyinWebCrawler.fetch_video_comments(aweme_id, cursor, count, cookie=cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
@@ -514,15 +526,16 @@ async def fetch_video_comments(request: Request,
 
 
 # 获取指定视频的评论回复数据
-@router.get("/fetch_video_comment_replies",
+@router.post("/fetch_video_comment_replies",
             response_model=ResponseModel,
             summary="获取指定视频的评论回复数据/Get comment replies data of specified video")
 async def fetch_video_comments_reply(request: Request,
-                                     item_id: str = Query(example="7354666303006723354", description="作品id/Video id"),
-                                     comment_id: str = Query(example="7354669356632638218",
+                                     item_id: str = Body(example="7354666303006723354", description="作品id/Video id"),
+                                     comment_id: str = Body(example="7354669356632638218",
                                                              description="评论id/Comment id"),
-                                     cursor: int = Query(default=0, description="游标/Cursor"),
-                                     count: int = Query(default=20, description="数量/Number")):
+                                     cursor: int = Body(default=0, description="游标/Cursor"),
+                                     count: int = Body(default=20, description="数量/Number"),
+                                     cookie: str = Body(default="", description="用户网页版抖音Cookie/Your web version of Douyin Cookie")):
     """
     # [中文]
     ### 用途:
@@ -553,7 +566,7 @@ async def fetch_video_comments_reply(request: Request,
     count = 20
     """
     try:
-        data = await DouyinWebCrawler.fetch_video_comments_reply(item_id, comment_id, cursor, count)
+        data = await DouyinWebCrawler.fetch_video_comments_reply(item_id, comment_id, cursor, count, cookie=cookie)
         return ResponseModel(code=200,
                              router=request.url.path,
                              data=data)
